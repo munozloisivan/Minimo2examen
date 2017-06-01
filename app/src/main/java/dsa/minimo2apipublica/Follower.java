@@ -4,7 +4,7 @@ package dsa.minimo2apipublica;
  * Created by ivanm on 31/05/2017.
  */
 
-public class Seguidores {
+public class Follower {
 
     private String login;
     private int id;
@@ -24,7 +24,7 @@ public class Seguidores {
     private String type;
     private boolean site_admin;
 
-    public Seguidores() {
+    public Follower() {
     }
 
     public String getLogin() {

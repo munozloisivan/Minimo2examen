@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Followers"></activity>
+        <activity android:name=".info_seguidores" />
     </application>
 
 </manifest>

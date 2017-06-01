@@ -13,21 +13,16 @@ import retrofit2.http.Path;
 
 public interface Github {
 
-    @GET("/repos/{owner}/{repo}/contributors")
-    Call<List<Contributor>> contributors(
-            @Path("owner") String owner,
-            @Path("repo") String repo);
-
     @GET("/users/{username}")
     Call<Usuario> getUsuario(
             @Path("username") String username);
 
     @GET("/users/{username}/repos")
-    Call<List<Usuario>> getFollowers(
+    Call<List<Follower>> getRepos(
             @Path("username") String username);
 
-
-
+    @GET("/users/{name}/followers")
+    Call<List<Follower>> getListFollowers(@Path("name") String name);
 
     //por si acaso
     @GET("/api/Users")

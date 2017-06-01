@@ -7,12 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,15 +22,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     String tag = "Main Activity";
-    List<Contributor> contributors = new ArrayList<Contributor>();
-    List<String> listContributors = new ArrayList<>();
-    ListView listView;
-
     int numRepos, followers, following;
     String loginUser;
     String avatar_url;
     TextView textView;
     String nombreUsuario;
+    EditText username;
 
     private Button botonMain;
 
@@ -45,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.tvNombreUsuario);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         Retrofit.Builder builder = new Retrofit.Builder()
-                               .baseUrl("https://api.github.com/")
+                                .baseUrl("https://api.github.com/")
                                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit =
@@ -61,13 +55,21 @@ public class MainActivity extends AppCompatActivity {
         final Github github = retrofit.create(Github.class);
 
         botonMain = (Button) findViewById(R.id.btn_Main);
-
+       // nombreUsuario = textView.getText().toString();
         botonMain.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                nombreUsuario = textView.getText().toString();
-                Call<Usuario> call = github.getUsuario(nombreUsuario);
+
+                username = (EditText) findViewById(R.id.etNombreUsuario);
+                nombreUsuario = username.getText().toString();
+
+                Toast.makeText(MainActivity.this, nombreUsuario, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, info_seguidores.class);
+                intent.putExtra("nombre",nombreUsuario);
+                startActivity(intent);
+
+        /*        Call<Usuario> call = github.getUsuario(nombreUsuario);
                 call.enqueue(new Callback() {
                     @Override
                     public void onResponse(Call call, Response response){
@@ -85,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("url avatar: "+usuario.avatar_url);
                         avatar_url = usuario.avatar_url;
 
-                        Intent intent = new Intent(MainActivity.this, Followers.class);
+
+
+                        Intent intent = new Intent(MainActivity.this, info_seguidores.class);
                         intent.putExtra("userlogin", loginUser);
                         intent.putExtra("numrepos",numRepos);
                         intent.putExtra("followers",followers);
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(Call call, Throwable t){
                         Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
             }
         });
 
