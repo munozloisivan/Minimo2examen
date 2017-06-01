@@ -111,12 +111,10 @@ public class info_seguidores extends AppCompatActivity {
 
         //uso de datos del usuario
         try {
-            Bundle extra = getIntent().getExtras();
-            String name = extra.getString("name");
 
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl("https://api.github.com/")
+                    .baseUrl("https://api.github.com")
                     .addConverterFactory(GsonConverterFactory.create());
 //
             Retrofit retrofit =
@@ -126,7 +124,7 @@ public class info_seguidores extends AppCompatActivity {
             Github getList = retrofit.create(Github.class);
 
             // Create a call instance for looking up Retrofit contributors.
-            Call<Follower> call = getList.getUsuario(name);
+            Call<Follower> call = getList.getUsuario(usuarioname);
 
             // Fetch and print a list of the contributors to the library.
             call.enqueue(new Callback<Follower>() {
@@ -137,7 +135,6 @@ public class info_seguidores extends AppCompatActivity {
                     following = follow.getFollowing();
                     textViewRepositories.setText("Repositories: "+numRepos);
                     textViewFollowing.setText("Following: "+following);
-
 
                     String AvatarUrl = follow.getAvatar_url();
                     ImageView imageView = (ImageView) findViewById(R.id.imageView);
