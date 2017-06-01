@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.bumptech.glide.Glide;
 
 public class info_seguidores extends AppCompatActivity {
 
@@ -44,19 +45,18 @@ public class info_seguidores extends AppCompatActivity {
         textViewRepositories = (TextView) findViewById(R.id.tvRepositories);
         textViewFollowing = (TextView) findViewById(R.id.tvFollowing);
 
-      /*  loginUser = getIntent().getExtras().getString("userlogin");
-        numRepos = getIntent().getExtras().getInt("numrepos");
-        followers = getIntent().getExtras().getInt("followers");
-        following = getIntent().getExtras().getInt("following");
-        avatar_url = getIntent().getExtras().getString("avatar");*/
-
         Bundle extradata = getIntent().getExtras();
         usuarioname = extradata.getString("nombre");
 
-        textViewRepositories.setText("Repositories: "+numRepos);
-        textViewFollowing.setText("Following: "+following);
+
+        textViewRepositories.setText("Repositories: ");
+        textViewFollowing.setText("Following: ");
+
 
         listView=(ListView)findViewById(R.id.lvFollowers);
+
+        //muestreo de la lista
+        try {
 
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             Retrofit.Builder builder = new Retrofit.Builder()
@@ -78,7 +78,7 @@ public class info_seguidores extends AppCompatActivity {
                 public void onResponse(Call<List<Follower>> call, Response<List<Follower>> response) {
                     progressbar = (ProgressBar) findViewById(R.id.progress);
 
-                    if(response.code()==200) {
+                    if (response.code() == 200) {
                         listaFollow = (List<Follower>) response.body();
                         listView = (ListView) findViewById(R.id.lvFollowers);
                         listaNombres = new ArrayList<>();
@@ -89,9 +89,8 @@ public class info_seguidores extends AppCompatActivity {
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
                                 (info_seguidores.this, android.R.layout.simple_list_item_1, listaNombres);
                         listView.setAdapter(arrayAdapter);
-                    }
-                  else {
-                        Toast.makeText(info_seguidores.this, "No funciona: " + response.code(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(info_seguidores.this, "Error trozo listado: " + response.code(), Toast.LENGTH_SHORT).show();
                         info_seguidores.this.finish();
                     }
                     progressbar.setVisibility(ListView.GONE);
@@ -99,10 +98,65 @@ public class info_seguidores extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Follower>> call, Throwable t) {
-                    Toast.makeText(info_seguidores.this, "No funciona", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(info_seguidores.this, "Error listado trozo", Toast.LENGTH_SHORT).show();
                     info_seguidores.this.finish();
                 }
             });
+
+        }
+        catch (Exception ex){
+            ex.getMessage();
+        }
+
+
+        //uso de datos del usuario
+        try {
+            Bundle extra = getIntent().getExtras();
+            String name = extra.getString("name");
+
+            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("https://api.github.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+//
+            Retrofit retrofit =
+                    builder.client(httpClient.build()).build();
+
+            // Create an instance of our GitHub API interface.
+            Github getList = retrofit.create(Github.class);
+
+            // Create a call instance for looking up Retrofit contributors.
+            Call<Follower> call = getList.getUsuario(name);
+
+            // Fetch and print a list of the contributors to the library.
+            call.enqueue(new Callback<Follower>() {
+                @Override
+                public void onResponse(Call<Follower> call, Response<Follower> response) {
+                    Follower follow = response.body();
+                    numRepos = follow.getPublic_repos();
+                    following = follow.getFollowing();
+                    textViewRepositories.setText("Repositories: "+numRepos);
+                    textViewFollowing.setText("Following: "+following);
+
+
+                    String AvatarUrl = follow.getAvatar_url();
+                    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.d(tag, "Imagen");
+                    Glide.with(info_seguidores.this)
+                            .load(AvatarUrl)
+                            .into(imageView);
+                }
+
+                @Override
+                public void onFailure(Call<Follower> call, Throwable t) {
+                    Toast.makeText(info_seguidores.this, "Error muestreo datos", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        catch (Exception e){
+            Toast.makeText(info_seguidores.this, "Error muestreo datos", Toast.LENGTH_SHORT).show();
+        }
+
         }
 
     @Override

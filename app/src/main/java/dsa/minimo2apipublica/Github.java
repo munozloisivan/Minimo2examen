@@ -14,19 +14,19 @@ import retrofit2.http.Path;
 public interface Github {
 
     @GET("/users/{username}")
-    Call<Usuario> getUsuario(
+    Call<Follower> getUsuario(
             @Path("username") String username);
 
+
     @GET("/users/{username}/repos")
-    Call<List<Follower>> getRepos(
-            @Path("username") String username);
+    Call<List<Follower>> getRepos(@Path("username") String username);
 
     @GET("/users/{name}/followers")
     Call<List<Follower>> getListFollowers(@Path("name") String name);
 
     //por si acaso
-    @GET("/api/Users")
-    Call<List<User>> getFollowersBackup();
+   //@GET("/api/Users")
+  //  Call<List<User>> getFollowersBackup();
 
 
 }

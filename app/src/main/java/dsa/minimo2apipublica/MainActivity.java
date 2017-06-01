@@ -64,45 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 username = (EditText) findViewById(R.id.etNombreUsuario);
                 nombreUsuario = username.getText().toString();
 
-                Toast.makeText(MainActivity.this, nombreUsuario, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, info_seguidores.class);
-                intent.putExtra("nombre",nombreUsuario);
-                startActivity(intent);
-
-        /*        Call<Usuario> call = github.getUsuario(nombreUsuario);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onResponse(Call call, Response response){
-                        Usuario usuario = new Usuario();
-                        usuario = (Usuario) response.body();
-                        System.out.println("*********");
-                        System.out.println("numero repos = "+usuario.public_repos);
-                        numRepos = usuario.public_repos;
-                        System.out.println("followers = "+usuario.followers);
-                        followers = usuario.followers;
-                        System.out.println("following = "+usuario.following);
-                        following = usuario.following;
-                        System.out.println("login"+usuario.login);
-                        loginUser = usuario.login;
-                        System.out.println("url avatar: "+usuario.avatar_url);
-                        avatar_url = usuario.avatar_url;
-
-
-
-                        Intent intent = new Intent(MainActivity.this, info_seguidores.class);
-                        intent.putExtra("userlogin", loginUser);
-                        intent.putExtra("numrepos",numRepos);
-                        intent.putExtra("followers",followers);
-                        intent.putExtra("following",following);
-                        intent.putExtra("avatar",avatar_url);
-                        intent.putExtra("nombre",nombreUsuario);
-                        startActivity(intent);
-                    }
-                    @Override
-                    public void onFailure(Call call, Throwable t){
-                        Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+                if (nombreUsuario!=null) {
+                    // Toast.makeText(MainActivity.this, nombreUsuario, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, info_seguidores.class);
+                    intent.putExtra("nombre", nombreUsuario);
+                    startActivity(intent);
+                }
+                else
+                    Toast.makeText(MainActivity.this, "Introduce Usuario", Toast.LENGTH_SHORT).show();
             }
         });
 

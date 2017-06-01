@@ -21,6 +21,8 @@ public class Follower {
     private String repos_url;
     private String events_url;
     private String received_events_url;
+    private int public_repos;
+    private int following;
     private String type;
     private boolean site_admin;
 
@@ -101,6 +103,21 @@ public class Follower {
 
     public String getStarred_url() {
         return starred_url;
+    }
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
+    }
+
+    public int getPublic_repos() {
+        return public_repos;
+    }
+
+    public void setPublic_repos(int public_repos) {
+        this.public_repos = public_repos;
     }
 
     public void setStarred_url(String starred_url) {
